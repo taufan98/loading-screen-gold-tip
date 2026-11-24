@@ -19,5 +19,9 @@ if "\n" in LINE.strip() or "\r" in LINE:
 
 out_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
 out_dir.mkdir(parents=True, exist_ok=True)
-(out_dir / "entry.txt").write_text(LINE + "\n", encoding="utf-8")
-print(f"Wrote {len(LINE)} characters to {out_dir / 'entry.txt'}")
+target = out_dir / "entry.txt"
+target.write_text(LINE + "\n", encoding="utf-8")
+# Read back and confirm the file holds exactly the validated line.
+if target.read_text(encoding="utf-8") != LINE + "\n":
+    raise SystemExit("written entry does not match the validated line")
+print(f"Wrote {len(LINE)} characters to {target}")
